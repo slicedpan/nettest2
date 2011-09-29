@@ -11,7 +11,7 @@ namespace nettest
         GameServer _server;
         Socket _socket;
         byte[] buffer = new byte[256];
-        public String lastText;
+        public String lastText = "";
         public void ReceiveData (IAsyncResult result)
         {
             String text = System.Text.Encoding.ASCII.GetString(buffer);
@@ -25,7 +25,7 @@ namespace nettest
             _socket = socket;
             _server = server;
             _socket.BeginReceive(buffer, 0, 256, SocketFlags.None, new AsyncCallback(ReceiveData), _socket);
-            _socket.BeginDisconnect(false, new AsyncCallback(Disconnect), null);
+            //_socket.BeginDisconnect(false, new AsyncCallback(Disconnect), null);
         }
         public void Disconnect(IAsyncResult result)
         {
