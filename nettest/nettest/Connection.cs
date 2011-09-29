@@ -16,7 +16,7 @@ namespace nettest
         {
             String text = System.Text.Encoding.ASCII.GetString(buffer);            
             text = text.TrimEnd('\0');
-            text = "Message from " + _socket.RemoteEndPoint + ": " + text;
+            lastText = "Message from " + _socket.RemoteEndPoint + ": " + text;
             if (text == "disconnect")
             {
                 Disconnect();
@@ -25,7 +25,6 @@ namespace nettest
             {
                 _socket.BeginReceive(buffer, 0, 256, SocketFlags.None, new AsyncCallback(ReceiveData), _socket);
             }
-            lastText = text;
         }
 
         public Connection(GameServer server, Socket socket)
