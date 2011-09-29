@@ -66,7 +66,7 @@ namespace nettest
         }
         public void Disconnect()
         {
-            _socket.Send(System.Text.Encoding.ASCII.GetBytes("disconnect");
+            _socket.Send(System.Text.Encoding.ASCII.GetBytes("disconnect"));
             _socket.Disconnect(true);
         }
     }
