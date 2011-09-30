@@ -23,7 +23,16 @@ namespace nettest
             }
             else
             {
+                ClearBuffer();
                 _socket.BeginReceive(buffer, 0, 256, SocketFlags.None, new AsyncCallback(ReceiveData), _socket);
+            }
+        }
+
+        void ClearBuffer()
+        {
+            for (int i = 0; i < 256; ++i)
+            {
+                buffer[i] = 0;
             }
         }
 
@@ -35,6 +44,7 @@ namespace nettest
         }
         public void Disconnect()
         {
+            _socket.Disconnect(false);
             _server.End(this);
         }
     }

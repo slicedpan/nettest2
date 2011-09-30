@@ -59,7 +59,7 @@ namespace nettest
                     chunk.strData = String.Format("{0} ms have elapsed, connected after {1} attempts", gameTime.TotalGameTime.Milliseconds, attempts);
                     IFormatter formatter = new BinaryFormatter();
                     byte[] data = System.Text.Encoding.ASCII.GetBytes(chunk.strData);                      
-                    _socket.Send(data);
+                    _socket.Send(data);                    
                 }
                 counter = 0;
             }
