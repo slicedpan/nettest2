@@ -16,12 +16,11 @@ namespace nettest
     {
         Socket _socket;
         int counter = 0;
-        bool isConnected = false;
         Timer timer;
         public int attempts = 0;
         public void Connect (IAsyncResult result)
         {
-            isConnected = true;
+
         }
         public Client(IPEndPoint endPoint)
         {
@@ -51,23 +50,25 @@ namespace nettest
         public void Update(GameTime gameTime)
         {
             counter += gameTime.ElapsedGameTime.Milliseconds;
-            if (counter > 1000)
+            if (counter > 50)
             {               
                 if (_socket.Connected)
                 {
-                    DataChunk chunk = new DataChunk();
-                    chunk.strData = String.Format("{0} ms have elapsed, connected after {1} attempts", gameTime.TotalGameTime.Milliseconds, attempts);
-                    IFormatter formatter = new BinaryFormatter();
-                    byte[] data = System.Text.Encoding.ASCII.GetBytes(chunk.strData);                      
-                    _socket.Send(data);                    
+                    DataChunk dataChunk = new DataChunk();
+                    dataChunk.pos.X = 0.0f;
+                    dataChunk.pos.Y = (float)gameTime.TotalGameTime.TotalMilliseconds;                      
+                    _socket.Send(dataChunk.getBytes());                    
                 }
                 counter = 0;
             }
         }
         public void Disconnect()
         {
-            _socket.Send(System.Text.Encoding.ASCII.GetBytes("disconnect"));
-            _socket.Disconnect(true);
+            if (_socket.Connected)
+            {
+                _socket.Send(System.Text.Encoding.ASCII.GetBytes("disconnect"));
+                _socket.Disconnect(true);
+            }
         }
     }
 }

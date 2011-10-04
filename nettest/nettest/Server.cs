@@ -7,9 +7,11 @@ using System.Net;
 using Microsoft.Xna.Framework;
 
 namespace nettest
-{
-    public class GameServer
+{    
+    public class GameServer : IDisposable
     {
+        public static GameServer currentInstance;
+        
         int portNumber;
         Socket socket;
         public bool isActive = false;
@@ -27,6 +29,14 @@ namespace nettest
         }
         public GameServer(int port = 8024)
         {
+            if (currentInstance == null)
+            {
+                currentInstance = this;
+            }
+            else
+            {
+                throw new Exception("only one instance of GameServer is allowed!");
+            }
             portNumber = port;            
         }
         public void Listen()
@@ -37,8 +47,11 @@ namespace nettest
             socket.Listen(10);
             socket.BeginAccept(new AsyncCallback(Accept), socket); 
         }
-
         public String LastText = "";
 
+        public void Dispose()
+        {
+            currentInstance = null;
+        }
     }
 }

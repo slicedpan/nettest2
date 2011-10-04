@@ -14,9 +14,10 @@ namespace nettest
         public String lastText = "";
         public void ReceiveData (IAsyncResult result)
         {
+            DataChunk chunk = DataChunk.fromBytes(buffer);
             String text = System.Text.Encoding.ASCII.GetString(buffer);            
             text = text.TrimEnd('\0');
-            lastText = "Message from " + _socket.RemoteEndPoint + ": " + text;
+            lastText = "Message from " + _socket.RemoteEndPoint + ": " + chunk.pos.ToString();
             if (text == "disconnect")
             {
                 Disconnect();
@@ -40,7 +41,7 @@ namespace nettest
         {
             _socket = socket;
             _server = server;
-            _socket.BeginReceive(buffer, 0, 256, SocketFlags.None, new AsyncCallback(ReceiveData), _socket);                        
+            _socket.BeginReceive(buffer, 0, DataChunk.size, SocketFlags.None, new AsyncCallback(ReceiveData), _socket);                        
         }
         public void Disconnect()
         {

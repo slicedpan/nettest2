@@ -21,8 +21,12 @@ namespace nettest
         SpriteBatch spriteBatch;
         GameServer server;
         Client client;
-        SpriteFont sf;
+        public static SpriteFont sf;
         KeyboardState lastState;
+
+        public static int height = 600;
+        public static int width = 800;
+
 
         public Game1()
         {
@@ -53,7 +57,12 @@ namespace nettest
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            ScreenManager sm = new ScreenManager(GraphicsDevice, Content);
+            sm.currentScreen = new TestScreen();
+            sm.currentScreen.LoadContent(Content);
             sf = Content.Load<SpriteFont>("font");
+            graphics.PreferredBackBufferHeight = height;
+            graphics.PreferredBackBufferWidth = width;
             // TODO: use this.Content to load your game content here
         }
 
@@ -74,6 +83,7 @@ namespace nettest
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
+            ScreenManager.currentInstance.Update(gameTime);            
 
             var keyState = Keyboard.GetState();
 
@@ -89,6 +99,7 @@ namespace nettest
             }
             if (keyState.IsKeyDown(Keys.A) && !lastState.IsKeyDown(Keys.A))
             {
+                ScreenManager.currentInstance.Switch(new MenuScreen());
                 if (!server.isActive)
                 {
                     server.Listen();
@@ -110,8 +121,10 @@ namespace nettest
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            ScreenManager.currentInstance.Draw(gameTime);
+
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            /*spriteBatch.Begin();
             for (int i = 0; i < server.connections.Count; ++i)
             {
                 spriteBatch.DrawString(sf, server.connections[i].lastText, new Vector2(0, 20 * i), Color.White);
@@ -121,11 +134,15 @@ namespace nettest
                 spriteBatch.DrawString(sf, String.Format("{0} attempts", client.attempts), new Vector2(0, 200), Color.White);
             }
             spriteBatch.End();
+            */
             base.Draw(gameTime);
         }
         protected override void EndRun()
         {
-            client.Disconnect();
+            if (client != null)
+            {
+                client.Disconnect();
+            }
         }
     }
 }
