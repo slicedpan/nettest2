@@ -33,7 +33,7 @@ namespace nettest
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             lastState = new KeyboardState();
-            server = new GameServer();            
+            server = new GameServer();
         }
 
         /// <summary>

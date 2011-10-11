@@ -9,7 +9,6 @@ namespace nettest
 {
     public class MenuScreen : TestScreen
     {
-        Texture2D borderBottom, borderTop, cornerBottom, cornerTop, borderLeft, background;
         Window window;
         public MenuScreen()
         {
